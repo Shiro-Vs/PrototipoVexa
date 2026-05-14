@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas | PrototipoVexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        color1: '#00090d',
+                        color2: '#0c2530',
+                        color3: '#21495a',
+                        color4: '#3f748a',
+                        color5: '#55a29e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-SemiBold.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        body { font-family: 'Asap', sans-serif; background-color: #f8fafc; color: #00090d; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0, 9, 13, 0.05); }
+        .sidebar-item:hover { background: rgba(85, 162, 158, 0.05); color: #55a29e; }
+        .sidebar-item.active { background: #55a29e; color: #ffffff; box-shadow: 0 4px 15px rgba(85, 162, 158, 0.3); }
+        .product-card { background: white; border: 1px solid #e2e8f0; transition: all 0.3s; }
+        .product-card:hover { border-color: #55a29e; transform: translateY(-4px); box-shadow: 0 10px 20px rgba(12, 37, 48, 0.05); }
+    </style>
+</head>
+<body class="flex min-h-screen w-full overflow-x-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 glass-panel border-r border-slate-200 flex flex-col fixed h-full z-50 transition-all duration-300 md:translate-x-0 -translate-x-full overflow-y-auto" id="sidebar">
+        <div class="p-6 flex items-center gap-3">
+            <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-10 object-contain">
+            <span class="text-xl font-bold tracking-tight text-color1">Vexa Pro</span>
+        </div>
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="../dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="ventas.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Ventas</span>
+            </a>
+            <a href="facturacion.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Facturación</span>
+            </a>
+            <a href="inventario.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Inventario</span>
+            </a>
+            <a href="personal.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>Personal</span>
+            </a>
+            <a href="crm.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Fidelización</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100">
+            <button onclick="window.location.href='../index.html'" class="flex items-center gap-3 px-4 py-3 w-full rounded-xl transition-all text-red-500 hover:bg-red-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 md:ml-64 p-4 md:p-8 flex flex-col lg:flex-row gap-8 w-full max-w-full overflow-x-hidden">
+        <div class="flex-1">
+            <header class="flex items-center gap-4 mb-6 md:hidden">
+                <button class="p-2 -ml-2 text-color1/50" id="menuBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <div class="flex items-center gap-2">
+                    <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-8 object-contain">
+                    <span class="font-bold text-color1">Vexa Pro</span>
+                </div>
+            </header>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-color1">Ventas y Facturación</h2>
+                <p class="text-color1/50">Registro rápido de transacciones.</p>
+            </div>
+
+            <div class="mb-8 relative flex-1">
+                <input type="text" placeholder="Buscar producto (F1)..." class="w-full bg-white border border-slate-200 text-color1 px-12 py-4 rounded-2xl focus:outline-none focus:border-color5 transition shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-color1/30 absolute left-4 top-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div class="product-card p-4 rounded-3xl cursor-pointer" onclick="addToCart('Café Espresso', 5.50)">
+                    <div class="w-full aspect-square bg-slate-100 rounded-2xl mb-3 flex items-center justify-center">
+                        <span class="text-4xl">☕</span>
+                    </div>
+                    <h4 class="font-bold text-color1">Café Espresso</h4>
+                    <p class="text-color5 font-bold">S/ 5.50</p>
+                </div>
+                <div class="product-card p-4 rounded-3xl cursor-pointer" onclick="addToCart('Croissant', 3.00)">
+                    <div class="w-full aspect-square bg-slate-100 rounded-2xl mb-3 flex items-center justify-center">
+                        <span class="text-4xl">🥐</span>
+                    </div>
+                    <h4 class="font-bold text-color1">Croissant</h4>
+                    <p class="text-color5 font-bold">S/ 3.00</p>
+                </div>
+                <div class="product-card p-4 rounded-3xl cursor-pointer" onclick="addToCart('Jugo Naranja', 8.00)">
+                    <div class="w-full aspect-square bg-slate-100 rounded-2xl mb-3 flex items-center justify-center">
+                        <span class="text-4xl">🍹</span>
+                    </div>
+                    <h4 class="font-bold text-color1">Jugo Naranja</h4>
+                    <p class="text-color5 font-bold">S/ 8.00</p>
+                </div>
+                <div class="product-card p-4 rounded-3xl cursor-pointer" onclick="addToCart('Capuccino', 10.50)">
+                    <img src="https://images.unsplash.com/photo-1541167760496-162955ed8a9f?auto=format&fit=crop&q=80&w=200" class="w-full h-32 object-cover rounded-2xl mb-4">
+                    <h4 class="font-bold text-color1">Capuccino</h4>
+                    <p class="text-color5 font-bold">S/ 10.50</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-96 glass-panel rounded-3xl p-6 flex flex-col h-fit sticky top-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="p-3 bg-color5/10 text-color5 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 11-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-color1">Carrito de Venta</h3>
+                    <p class="text-xs text-color1/50">3 items seleccionados</p>
+                </div>
+            </div>
+
+            <div class="flex-1 space-y-4 max-h-[400px] overflow-y-auto mb-6 pr-2" id="cartItems">
+                <div class="text-center py-10 text-slate-400" id="emptyCart">
+                    <p>No hay productos seleccionados</p>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-slate-100 space-y-4">
+                <div class="flex justify-between text-color1/60">
+                    <span>Subtotal</span>
+                    <span id="subtotal">S/ 0.00</span>
+                </div>
+                <div class="flex justify-between text-color1 font-bold text-xl">
+                    <span>Total</span>
+                    <span class="text-color5" id="total">S/ 0.00</span>
+                </div>
+                <button class="w-full bg-color5 hover:bg-color5/90 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-color5/20">
+                    Finalizar Venta
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menuBtn');
+        if (menuBtn) {
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+
+        const cartItemsContainer = document.getElementById('cartItems');
+        const emptyCart = document.getElementById('emptyCart');
+        const subtotalEl = document.getElementById('subtotal');
+        const igvEl = document.getElementById('igv');
+        const totalEl = document.getElementById('total');
+
+        let cart = [];
+
+        function addToCart(name, price) {
+            const existing = cart.find(item => item.name === name);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ name, price, qty: 1 });
+            }
+            renderCart();
+        }
+
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            renderCart();
+        }
+
+        function renderCart() {
+            if (cart.length === 0) {
+                emptyCart.style.display = 'block';
+                cartItemsContainer.innerHTML = '';
+                emptyCart.innerHTML = '<p>No hay productos seleccionados</p>';
+                cartItemsContainer.appendChild(emptyCart);
+            } else {
+                emptyCart.style.display = 'none';
+                cartItemsContainer.innerHTML = '';
+                cart.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'flex justify-between items-center group animate-fade-in';
+                    div.innerHTML = `
+                        <div class="flex gap-3 items-center">
+                            <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center font-bold text-indigo-400">${item.qty}x</div>
+                            <div>
+                                <h4 class="text-sm font-bold">${item.name}</h4>
+                                <p class="text-xs text-slate-500">S/ ${item.price.toFixed(2)} c/u</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-sm text-white">S/ ${(item.price * item.qty).toFixed(2)}</span>
+                            <button onclick="removeFromCart('${item.name}')" class="text-slate-600 hover:text-red-500 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(div);
+                });
+            }
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const igv = subtotal * 0.18;
+            const total = subtotal + igv;
+
+            subtotalEl.innerText = `S/ ${subtotal.toFixed(2)}`;
+            igvEl.innerText = `S/ ${igv.toFixed(2)}`;
+            totalEl.innerText = `S/ ${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>

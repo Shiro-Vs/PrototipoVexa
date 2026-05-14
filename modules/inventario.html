@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | PrototipoVexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        color1: '#00090d',
+                        color2: '#0c2530',
+                        color3: '#21495a',
+                        color4: '#3f748a',
+                        color5: '#55a29e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-SemiBold.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        body { font-family: 'Asap', sans-serif; background-color: #f8fafc; color: #00090d; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0, 9, 13, 0.05); }
+        .sidebar-item:hover { background: rgba(85, 162, 158, 0.05); color: #55a29e; }
+        .sidebar-item.active { background: #55a29e; color: #ffffff; box-shadow: 0 4px 15px rgba(85, 162, 158, 0.3); }
+        .inventory-card { background: white; border: 1px solid #e2e8f0; transition: all 0.3s; }
+        .inventory-card:hover { border-color: #55a29e; transform: translateY(-4px); box-shadow: 0 10px 20px rgba(12, 37, 48, 0.05); }
+        .badge-red { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .badge-yellow { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+    </style>
+</head>
+<body class="flex min-h-screen w-full overflow-x-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 glass-panel border-r border-slate-200 flex flex-col fixed h-full z-50 transition-all duration-300 md:translate-x-0 -translate-x-full overflow-y-auto" id="sidebar">
+        <div class="p-6 flex items-center gap-3">
+            <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-10 object-contain">
+            <span class="text-xl font-bold tracking-tight text-color1">Vexa Pro</span>
+        </div>
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="../dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="ventas.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Ventas</span>
+            </a>
+            <a href="facturacion.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Facturación</span>
+            </a>
+            <a href="inventario.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Inventario</span>
+            </a>
+            <a href="personal.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>Personal</span>
+            </a>
+            <a href="crm.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Fidelización</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100">
+            <button onclick="window.location.href='../index.html'" class="flex items-center gap-3 px-4 py-3 w-full rounded-xl transition-all text-red-500 hover:bg-red-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-64 p-4 md:p-8 w-full max-w-full overflow-x-hidden">
+        <!-- Header Móvil Consistente -->
+        <header class="flex items-center gap-4 mb-6 md:hidden">
+            <button class="p-2 -ml-2 text-color1/50" id="menuBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <div class="flex items-center gap-2">
+                <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-8 object-contain">
+                <span class="font-bold text-color1">Vexa Pro</span>
+            </div>
+        </header>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-color1">Inventario Inteligente</h2>
+                <p class="text-sm md:text-base text-color1/50">Gestión de stock en tiempo real.</p>
+            </div>
+            <button class="w-full md:w-auto bg-color5 hover:bg-color5/90 text-white px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-color5/20 text-sm md:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Nuevo Producto
+            </button>
+        </div>
+
+        <!-- Stock Alerts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
+            <div class="glass-panel p-5 md:p-6 rounded-3xl border-l-4 border-red-500">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="font-bold text-red-500 text-sm md:text-base">Crítico: Stock Agotado</h3>
+                    <span class="badge-red px-2 py-0.5 rounded-lg text-[10px] font-bold">3 Items</span>
+                </div>
+                <ul class="space-y-2">
+                    <li class="flex justify-between items-center text-xs md:text-sm text-color1">
+                        <span>Leche Deslactosada</span>
+                        <span class="font-bold">0 ud.</span>
+                    </li>
+                    <li class="flex justify-between items-center text-xs md:text-sm text-color1">
+                        <span>Servilletas Premium</span>
+                        <span class="font-bold">0 ud.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="glass-panel p-5 md:p-6 rounded-3xl border-l-4 border-amber-500">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="font-bold text-amber-500 text-sm md:text-base">Alerta: Stock Bajo</h3>
+                    <span class="badge-yellow px-2 py-0.5 rounded-lg text-[10px] font-bold">8 Items</span>
+                </div>
+                <ul class="space-y-2">
+                    <li class="flex justify-between items-center text-xs md:text-sm text-color1">
+                        <span>Café Grano Arabica</span>
+                        <span class="font-bold">5 kg</span>
+                    </li>
+                    <li class="flex justify-between items-center text-xs md:text-sm text-color1">
+                        <span>Azúcar Blanca</span>
+                        <span class="font-bold">2 kg</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="glass-panel p-5 md:p-6 rounded-3xl border-l-4 border-indigo-500">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="font-bold text-indigo-500 text-sm md:text-base">Próximos Ingresos</h3>
+                    <span class="bg-indigo-50 text-indigo-500 border border-indigo-100 px-2 py-0.5 rounded-lg text-[10px] font-bold">Mañana</span>
+                </div>
+                <p class="text-[11px] md:text-sm text-slate-500 leading-relaxed">Proveedor "Distribuidora San Juan" entrega 20 cajas de insumos a las 09:00 AM.</p>
+            </div>
+        </div>
+
+        <!-- Product Gallery -->
+        <h3 class="text-xl font-bold mb-6 text-color1">Catálogo de Productos</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <!-- Product Card -->
+            <div class="inventory-card rounded-3xl overflow-hidden group">
+                <div class="h-40 md:h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&q=80&w=400" alt="Cafe" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                </div>
+                <div class="p-4 md:p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-base md:text-lg text-color1">Café Molido</h4>
+                        <span class="text-[10px] px-2 py-1 bg-slate-100 rounded-lg text-slate-500">Cafetería</span>
+                    </div>
+                    <p class="text-color5 font-bold mb-3 md:mb-4 text-sm md:text-base">S/ 45.00 <span class="text-slate-400 text-xs font-normal">/ kg</span></p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs md:text-sm text-slate-500">Stock: <span class="text-color1 font-bold">12 kg</span></span>
+                        <button class="text-slate-400 hover:text-color5 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product Card 2 -->
+            <div class="inventory-card rounded-3xl overflow-hidden group">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400" alt="Pan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                </div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-lg text-color1">Pan Artesanal</h4>
+                        <span class="text-xs px-2 py-1 bg-slate-100 rounded-lg text-slate-500">Panadería</span>
+                    </div>
+                    <p class="text-color5 font-bold mb-4">S/ 1.50 <span class="text-slate-400 text-xs font-normal">/ ud</span></p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-slate-500">Stock: <span class="text-red-500 font-bold">5 ud</span></span>
+                        <button class="text-slate-400 hover:text-color5 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- More cards could go here... -->
+        </div>
+
+        <div class="glass-panel rounded-3xl overflow-hidden mb-10 w-full">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-color1">Movimientos Recientes</h3>
+                <button class="text-color5 text-sm hover:underline font-bold">Ver todo</button>
+            </div>
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-left min-w-[600px]">
+                    <thead>
+                        <tr class="bg-slate-50 text-color1/50 text-xs uppercase tracking-wider">
+                            <th class="px-6 py-4 font-bold">Producto</th>
+                            <th class="px-6 py-4 font-bold">Tipo</th>
+                            <th class="px-6 py-4 font-bold">Cantidad</th>
+                            <th class="px-6 py-4 font-bold">Fecha</th>
+                            <th class="px-6 py-4 font-bold">Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-6 py-4 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-color5/10 flex items-center justify-center text-xs">☕</div>
+                                <span class="font-medium text-color1">Café Espresso</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-red-500 bg-red-50 px-2 py-1 rounded-full text-[10px] font-bold border border-red-100">Salida</span>
+                            </td>
+                            <td class="px-6 py-4 font-bold text-color1">-2 ud.</td>
+                            <td class="px-6 py-4 text-color1/50 text-sm">Hoy, 10:45 AM</td>
+                            <td class="px-6 py-4 text-color1/50 text-sm">Juan Pérez</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-6 py-4 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-color5/10 flex items-center justify-center text-xs">📦</div>
+                                <span class="font-medium text-color1">Azúcar Blanca</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-emerald-500 bg-emerald-50 px-2 py-1 rounded-full text-[10px] font-bold border border-emerald-100">Entrada</span>
+                            </td>
+                            <td class="px-6 py-4 font-bold text-color1">+50 kg</td>
+                            <td class="px-6 py-4 text-color1/50 text-sm">Ayer, 04:20 PM</td>
+                            <td class="px-6 py-4 text-color1/50 text-sm">María García</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <script>
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menuBtn');
+        if (menuBtn) {
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+    </script>
+</body>
+</html>

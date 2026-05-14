@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal | PrototipoVexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        color1: '#00090d',
+                        color2: '#0c2530',
+                        color3: '#21495a',
+                        color4: '#3f748a',
+                        color5: '#55a29e',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-SemiBold.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        body { font-family: 'Asap', sans-serif; background-color: #f8fafc; color: #00090d; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0, 9, 13, 0.05); }
+        .sidebar-item:hover { background: rgba(85, 162, 158, 0.05); color: #55a29e; }
+        .sidebar-item.active { background: #55a29e; color: #ffffff; box-shadow: 0 4px 15px rgba(85, 162, 158, 0.3); }
+        .pin-btn { background: #ffffff; border: 1px solid #e2e8f0; color: #0c2530; transition: all 0.2s; }
+        .pin-btn:hover { border-color: #55a29e; color: #55a29e; transform: scale(1.05); }
+        .pin-btn:active { background: #f8fafc; transform: scale(0.95); }
+        .dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; }
+    </style>
+</head>
+<body class="flex min-h-screen w-full overflow-x-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 glass-panel border-r border-slate-200 flex flex-col fixed h-full z-50 transition-all duration-300 md:translate-x-0 -translate-x-full overflow-y-auto" id="sidebar">
+        <div class="p-6 flex items-center gap-3">
+            <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-10 object-contain">
+            <span class="text-xl font-bold tracking-tight text-color1">Vexa Pro</span>
+        </div>
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="../dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="ventas.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Ventas</span>
+            </a>
+            <a href="facturacion.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Facturación</span>
+            </a>
+            <a href="inventario.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Inventario</span>
+            </a>
+            <a href="personal.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>Personal</span>
+            </a>
+            <a href="crm.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Fidelización</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100">
+            <button onclick="window.location.href='../index.html'" class="flex items-center gap-3 px-4 py-3 w-full rounded-xl transition-all text-red-500 hover:bg-red-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-64 p-4 md:p-8 w-full max-w-full overflow-x-hidden">
+        <!-- Header Móvil Consistente -->
+        <header class="flex items-center gap-4 mb-6 md:hidden">
+            <button class="p-2 -ml-2 text-color1/50" id="menuBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <div class="flex items-center gap-2">
+                <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-8 object-contain">
+                <span class="font-bold text-color1">Vexa Pro</span>
+            </div>
+        </header>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-color1">Gestión de Personal</h2>
+                <p class="text-color1/50">Panel administrativo de recursos humanos.</p>
+            </div>
+            <button onclick="openModal('addWorkerModal')" class="bg-color5 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-color5/20 hover:bg-color5/90 transition active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Nuevo Trabajador
+            </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-color5">
+                <p class="text-xs font-bold text-color1/40 uppercase tracking-wider mb-1">Total Personal</p>
+                <h4 class="text-2xl font-black text-color1">24</h4>
+            </div>
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-emerald-500">
+                <p class="text-xs font-bold text-color1/40 uppercase tracking-wider mb-1">Activos Ahora</p>
+                <h4 class="text-2xl font-black text-emerald-500">18</h4>
+            </div>
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-amber-500">
+                <p class="text-xs font-bold text-color1/40 uppercase tracking-wider mb-1">En Descanso</p>
+                <h4 class="text-2xl font-black text-amber-500">4</h4>
+            </div>
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-red-500">
+                <p class="text-xs font-bold text-color1/40 uppercase tracking-wider mb-1">Faltas Hoy</p>
+                <h4 class="text-2xl font-black text-red-500">2</h4>
+            </div>
+        </div>
+
+        <!-- Main Admin Panel -->
+        <div class="glass-panel rounded-3xl overflow-hidden mb-10">
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-100 overflow-x-auto no-scrollbar">
+                <button onclick="switchTab('list')" id="tab-list" class="px-8 py-5 text-sm font-bold border-b-2 border-color5 text-color5 whitespace-nowrap">Lista de Personal</button>
+                <button onclick="switchTab('schedules')" id="tab-schedules" class="px-8 py-5 text-sm font-bold border-b-2 border-transparent text-color1/40 hover:text-color1 transition whitespace-nowrap">Horarios</button>
+                <button onclick="switchTab('performance')" id="tab-performance" class="px-8 py-5 text-sm font-bold border-b-2 border-transparent text-color1/40 hover:text-color1 transition whitespace-nowrap">Rendimiento</button>
+            </div>
+
+            <!-- Tab: List -->
+            <div id="content-list" class="p-4 md:p-8">
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="relative flex-1">
+                        <input type="text" placeholder="Buscar por nombre, cargo o ID..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-12 py-3 outline-none focus:border-color5 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-4 top-3.5 text-color1/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <select class="bg-slate-50 border border-slate-200 rounded-xl px-6 py-3 outline-none text-color1/60">
+                        <option>Todos los Estados</option>
+                        <option>Activos</option>
+                        <option>Inactivos</option>
+                    </select>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[800px]">
+                        <thead>
+                            <tr class="text-xs font-bold text-color1/40 uppercase tracking-wider border-b border-slate-100">
+                                <th class="px-4 py-4">Colaborador</th>
+                                <th class="px-4 py-4">Cargo / Rol</th>
+                                <th class="px-4 py-4">Estado</th>
+                                <th class="px-4 py-4">Último Ingreso</th>
+                                <th class="px-4 py-4 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            <tr class="hover:bg-slate-50/50 transition group">
+                                <td class="px-4 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://ui-avatars.com/api/?name=Juan+Perez&background=0c2530&color=fff" class="w-10 h-10 rounded-full shadow-sm">
+                                        <div>
+                                            <p class="font-bold text-color1">Juan Pérez</p>
+                                            <p class="text-xs text-color1/40">ID: VEX-001</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4">
+                                    <span class="bg-color5/10 text-color5 px-3 py-1 rounded-lg text-xs font-bold">Barista Senior</span>
+                                </td>
+                                <td class="px-4 py-4">
+                                    <span class="flex items-center gap-2 text-emerald-500 font-bold text-xs">
+                                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                        Activo
+                                    </span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-color1/50">Hoy, 07:55 AM</td>
+                                <td class="px-4 py-4 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <button onclick="openModal('passModal')" class="p-2 hover:bg-amber-50 text-amber-500 rounded-lg transition" title="Cambiar Contraseña">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 hover:bg-color3/10 text-color3 rounded-lg transition" title="Editar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 hover:bg-red-50 text-red-500 rounded-lg transition" title="Dar de baja">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- More workers... -->
+                            <tr class="hover:bg-slate-50/50 transition group">
+                                <td class="px-4 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://ui-avatars.com/api/?name=Maria+Garcia&background=3f748a&color=fff" class="w-10 h-10 rounded-full shadow-sm">
+                                        <div>
+                                            <p class="font-bold text-color1">María García</p>
+                                            <p class="text-xs text-color1/40">ID: VEX-002</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4">
+                                    <span class="bg-color4/10 text-color4 px-3 py-1 rounded-lg text-xs font-bold">Administrador</span>
+                                </td>
+                                <td class="px-4 py-4">
+                                    <span class="flex items-center gap-2 text-slate-400 font-bold text-xs">
+                                        <span class="w-2 h-2 bg-slate-400 rounded-full"></span>
+                                        Inactivo
+                                    </span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-color1/50">Ayer, 06:00 PM</td>
+                                <td class="px-4 py-4 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <button onclick="openModal('passModal')" class="p-2 hover:bg-amber-50 text-amber-500 rounded-lg transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg></button>
+                                        <button class="p-2 hover:bg-color3/10 text-color3 rounded-lg transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+                                        <button class="p-2 hover:bg-emerald-50 text-emerald-500 rounded-lg transition" title="Activar"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Schedules -->
+            <div id="content-schedules" class="hidden p-4 md:p-8">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Left: Shift Overview (General) -->
+                    <div class="flex-1">
+                        <h4 class="text-lg font-bold text-color1 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-color5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Vista General de Turnos
+                        </h4>
+                        <div class="space-y-4">
+                            <!-- Turno Mañana -->
+                            <div class="bg-white border border-slate-100 rounded-2xl p-5 hover:border-color5 transition">
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest">Mañana (08:00 - 16:00)</span>
+                                    <span class="text-xs text-color1/40 font-bold">4 Activos</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                                        <img src="https://ui-avatars.com/api/?name=J+Perez&background=0c2530&color=fff" class="w-6 h-6 rounded-full">
+                                        <span class="text-xs font-bold text-color1">J. Pérez</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                                        <img src="https://ui-avatars.com/api/?name=M+Garcia&background=3f748a&color=fff" class="w-6 h-6 rounded-full">
+                                        <span class="text-xs font-bold text-color1">M. García</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                                        <img src="https://ui-avatars.com/api/?name=A+Belen&background=55a29e&color=fff" class="w-6 h-6 rounded-full">
+                                        <span class="text-xs font-bold text-color1">A. Belén</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Turno Tarde -->
+                            <div class="bg-white border border-slate-100 rounded-2xl p-5 hover:border-color5 transition">
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="bg-amber-50 text-amber-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest">Tarde (16:00 - 00:00)</span>
+                                    <span class="text-xs text-color1/40 font-bold">3 Activos</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                                        <img src="https://ui-avatars.com/api/?name=C+Soto&background=21495a&color=fff" class="w-6 h-6 rounded-full">
+                                        <span class="text-xs font-bold text-color1">C. Soto</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                                        <img src="https://ui-avatars.com/api/?name=P+Luis&background=00090d&color=fff" class="w-6 h-6 rounded-full">
+                                        <span class="text-xs font-bold text-color1">P. Luis</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Individual Schedule Simulation -->
+                    <div class="w-full lg:w-96 bg-slate-50/50 rounded-2xl p-6 border border-slate-100">
+                        <h4 class="text-lg font-bold text-color1 mb-6">Consultar Individual</h4>
+                        <div class="mb-6">
+                            <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">Seleccionar Trabajador</label>
+                            <select onchange="simulateIndividualSchedule(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5 font-bold text-color1">
+                                <option value="">Seleccione...</option>
+                                <option value="Juan Pérez">Juan Pérez</option>
+                                <option value="María García">María García</option>
+                                <option value="Carlos Soto">Carlos Soto</option>
+                            </select>
+                        </div>
+
+                        <div id="individualScheduleResult" class="hidden animate-scale-up">
+                            <div class="flex items-center gap-4 mb-6">
+                                <img id="workerAvatar" src="" class="w-12 h-12 rounded-full border-2 border-color5 p-0.5">
+                                <div>
+                                    <p class="font-black text-color1" id="workerName">---</p>
+                                    <p class="text-xs text-color5 font-bold uppercase" id="workerRole">Barista</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-white rounded-xl text-xs">
+                                    <span class="font-bold text-color1/40">Lunes</span>
+                                    <span class="font-bold text-emerald-500">08:00 - 16:00</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-white rounded-xl text-xs">
+                                    <span class="font-bold text-color1/40">Martes</span>
+                                    <span class="font-bold text-emerald-500">08:00 - 16:00</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-white rounded-xl text-xs">
+                                    <span class="font-bold text-color1/40">Miércoles</span>
+                                    <span class="font-bold text-red-400">DESCANSO</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-white rounded-xl text-xs">
+                                    <span class="font-bold text-color1/40">Jueves</span>
+                                    <span class="font-bold text-emerald-500">08:00 - 16:00</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-white rounded-xl text-xs">
+                                    <span class="font-bold text-color1/40">Viernes</span>
+                                    <span class="font-bold text-emerald-500">08:00 - 16:00</span>
+                                </div>
+                            </div>
+
+                            <button class="w-full mt-6 bg-color2 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-color2/20">
+                                Editar Horario
+                            </button>
+                        </div>
+
+                        <div id="noWorkerSelected" class="text-center py-20 opacity-30">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <p class="text-sm font-bold">Selecciona un perfil para ver su agenda</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Performance (Hidden by default) -->
+            <div id="content-performance" class="hidden p-8">
+                <div class="h-80">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="addWorkerModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-color1/80 backdrop-blur-sm" onclick="closeModal('addWorkerModal')"></div>
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-8 relative z-10 shadow-2xl animate-scale-up">
+            <h3 class="text-2xl font-bold text-color1 mb-6">Nuevo Trabajador</h3>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">Nombres</label>
+                        <input type="text" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">Apellidos</label>
+                        <input type="text" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">DNI / Documento</label>
+                    <input type="text" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">Cargo</label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5">
+                        <option>Barista</option>
+                        <option>Caja</option>
+                        <option>Mozo</option>
+                        <option>Administrador</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">Contraseña Inicial</label>
+                    <input type="password" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5">
+                </div>
+                <div class="pt-6 flex gap-4">
+                    <button onclick="closeModal('addWorkerModal')" class="flex-1 py-3 rounded-xl font-bold text-color1/40 hover:bg-slate-100 transition">Cancelar</button>
+                    <button class="flex-1 bg-color5 text-white py-3 rounded-xl font-bold shadow-lg shadow-color5/20">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="passModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-color1/80 backdrop-blur-sm" onclick="closeModal('passModal')"></div>
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-8 relative z-10 shadow-2xl animate-scale-up">
+            <h3 class="text-xl font-bold text-color1 mb-2">Resetear Contraseña</h3>
+            <p class="text-sm text-color1/50 mb-6">Cambiar credenciales para <b>Juan Pérez</b></p>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">Nueva Contraseña</label>
+                    <input type="password" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-color1/40 uppercase mb-2 block">Confirmar</label>
+                    <input type="password" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-color5">
+                </div>
+                <div class="pt-4">
+                    <button class="w-full bg-amber-500 text-white py-3 rounded-xl font-bold shadow-lg shadow-amber-500/20">Actualizar Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menuBtn');
+        if (menuBtn) {
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+
+        // Tab Switching Logic
+        function switchTab(tab) {
+            // Ocultar todos los contenidos
+            document.getElementById('content-list').classList.add('hidden');
+            document.getElementById('content-schedules').classList.add('hidden');
+            document.getElementById('content-performance').classList.add('hidden');
+
+            // Resetear estilos de tabs
+            ['list', 'schedules', 'performance'].forEach(t => {
+                const tabBtn = document.getElementById(`tab-${t}`);
+                tabBtn.classList.remove('border-color5', 'text-color5');
+                tabBtn.classList.add('border-transparent', 'text-color1/40');
+            });
+
+            // Mostrar tab seleccionado
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            activeBtn.classList.add('border-color5', 'text-color5');
+            activeBtn.classList.remove('border-transparent', 'text-color1/40');
+
+            // Reiniciar gráfico si es la pestaña de rendimiento
+            if (tab === 'performance') {
+                initChart();
+            }
+        }
+
+        // Modal Logic
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Schedule Simulation Logic
+        function simulateIndividualSchedule(name) {
+            const resultDiv = document.getElementById('individualScheduleResult');
+            const noSelectionDiv = document.getElementById('noWorkerSelected');
+            
+            if (!name) {
+                resultDiv.classList.add('hidden');
+                noSelectionDiv.classList.remove('hidden');
+                return;
+            }
+
+            const data = {
+                'Juan Pérez': { role: 'Barista Senior', color: '0c2530' },
+                'María García': { role: 'Administradora', color: '3f748a' },
+                'Carlos Soto': { role: 'Caja', color: '21495a' }
+            };
+
+            const worker = data[name] || { role: 'Colaborador', color: '55a29e' };
+
+            document.getElementById('workerName').innerText = name;
+            document.getElementById('workerRole').innerText = worker.role;
+            document.getElementById('workerAvatar').src = `https://ui-avatars.com/api/?name=${name.replace(' ', '+')}&background=${worker.color}&color=fff`;
+            
+            noSelectionDiv.classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+        }
+
+        // Performance Chart
+        let myChart;
+        function initChart() {
+            const canvas = document.getElementById('performanceChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Juan Pérez', 'María García', 'Carlos Soto', 'Ana Belén', 'Pedro Luis'],
+                    datasets: [{
+                        label: 'Productividad Semanal (%)',
+                        data: [95, 88, 76, 92, 84],
+                        backgroundColor: '#55a29e',
+                        borderRadius: 8,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Init Default Tab
+        switchTab('list');
+    </script>
+</body>
+</html>

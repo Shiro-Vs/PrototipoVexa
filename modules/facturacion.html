@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación Avanzada | PrototipoVexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        color1: '#00090d',
+                        color2: '#0c2530',
+                        color3: '#21495a',
+                        color4: '#3f748a',
+                        color5: '#55a29e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-SemiBold.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('../Asap_Complete/Fonts/OTF/Asap-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        body { font-family: 'Asap', sans-serif; background-color: #f8fafc; color: #00090d; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0, 9, 13, 0.05); }
+        .sidebar-item:hover { background: rgba(85, 162, 158, 0.05); color: #55a29e; }
+        .sidebar-item.active { background: #55a29e; color: #ffffff; box-shadow: 0 4px 15px rgba(85, 162, 158, 0.3); }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #e2e8f0; color: #0c2530; transition: all 0.3s; }
+        .step-circle.active { border-color: #55a29e; background: #55a29e; color: white; }
+        .step-circle.completed { border-color: #55a29e; color: #55a29e; }
+        .input-light { background: #ffffff; border: 1px solid #e2e8f0; color: #00090d; transition: all 0.3s; }
+        .input-light:focus { border-color: #55a29e; outline: none; box-shadow: 0 0 10px rgba(85, 162, 158, 0.1); }
+        .badge-green { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-yellow { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .badge-red { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .table-row:hover { background: rgba(248, 231, 222, 0.02); transform: scale(1.002); }
+        .modal-blur { backdrop-filter: blur(8px); background: rgba(12, 37, 48, 0.8); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen w-full overflow-x-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 glass-panel border-r border-slate-200 flex flex-col fixed h-full z-50 transition-all duration-300 md:translate-x-0 -translate-x-full overflow-y-auto" id="sidebar">
+        <div class="p-6 flex items-center gap-3">
+            <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-10 object-contain">
+            <span class="text-xl font-bold tracking-tight text-color1">Vexa Pro</span>
+        </div>
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="../dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="ventas.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Ventas</span>
+            </a>
+            <a href="facturacion.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Facturación</span>
+            </a>
+            <a href="inventario.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Inventario</span>
+            </a>
+            <a href="personal.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>Personal</span>
+            </a>
+            <a href="crm.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-color1/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Fidelización</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100">
+            <button onclick="window.location.href='../index.html'" class="flex items-center gap-3 px-4 py-3 w-full rounded-xl transition-all text-red-500 hover:bg-red-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="md:ml-64 min-h-screen flex flex-col w-full overflow-x-hidden">
+        <main class="flex-1 p-4 md:p-10 w-full max-w-7xl mx-auto overflow-x-hidden">
+        <header class="flex items-center gap-4 mb-6 md:hidden">
+            <button class="p-2 -ml-2 text-color1/50" id="menuBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <div class="flex items-center gap-2">
+                <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-8 object-contain">
+                <span class="font-bold text-color1">Vexa Pro</span>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+            <div class="w-full lg:w-auto">
+                <h2 class="text-2xl md:text-3xl font-bold text-color1">Asistente de Emisión</h2>
+                <p class="text-color1/50 text-sm md:text-base">Sigue los pasos para generar tu comprobante.</p>
+            </div>
+            <div class="flex items-center gap-2 md:gap-6">
+                <div class="step-circle active" id="stepIndicator1">1</div>
+                <div class="h-1 w-6 md:w-16 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-color5 transition-all duration-500" style="width: 0%" id="progressIndicator1"></div>
+                </div>
+                <div class="step-circle" id="stepIndicator2">2</div>
+                <div class="h-1 w-6 md:w-16 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-color5 transition-all duration-500" style="width: 0%" id="progressIndicator2"></div>
+                </div>
+                <div class="step-circle" id="stepIndicator3">3</div>
+            </div>
+        </div>
+
+        <!-- PASO 1: CLIENTE -->
+        <div id="step1Content" class="glass-panel rounded-2xl md:rounded-3xl p-4 md:p-8 mb-10 relative">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-color1">Datos del Cliente</h3>
+                <span class="text-xs font-bold text-color5 px-3 py-1 bg-color5/10 rounded-full">Paso 1 de 3</span>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm text-color1/60 mb-2">DNI o RUC del Cliente</label>
+                    <div class="flex gap-2 md:gap-4">
+                        <input type="text" placeholder="Ej: 20601234567" class="flex-1 input-light px-4 py-3 rounded-xl outline-none text-sm md:text-base" id="customerDoc" onkeyup="simulateSearch(this.value)">
+                        <button class="bg-color3 text-white px-4 md:px-6 py-3 rounded-xl font-bold hover:bg-color3/90 transition shadow-lg shadow-color3/20 text-sm md:text-base">Buscar</button>
+                    </div>
+                    <p id="searchLoader" class="text-xs text-color5 mt-2 hidden animate-pulse">Buscando en base de datos...</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div>
+                        <label class="block text-sm text-color1/60 mb-2">Nombre / Razón Social</label>
+                        <input type="text" id="clientName" readonly class="w-full input-light px-4 py-3 rounded-xl bg-slate-50 cursor-not-allowed text-sm md:text-base">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-color1/60 mb-2">Dirección Fiscal</label>
+                        <input type="text" id="clientAddress" readonly class="w-full input-light px-4 py-3 rounded-xl bg-slate-50 cursor-not-allowed text-sm md:text-base">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-slate-100">
+                    <button class="px-6 md:px-8 py-3 rounded-xl font-bold text-color1/40 hover:text-color1 transition text-sm md:text-base">Cancelar</button>
+                    <button onclick="nextStep(2)" class="bg-color5 text-white px-8 md:px-10 py-3 rounded-xl font-bold hover:bg-color5/90 transition shadow-lg shadow-color5/20 text-sm md:text-base">Siguiente</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASO 2: PRODUCTOS -->
+        <div id="step2Content" class="hidden glass-panel rounded-2xl md:rounded-3xl p-4 md:p-8 mb-10 relative">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-color1">Seleccionar Productos</h3>
+                <span class="text-xs font-bold text-color5 px-3 py-1 bg-color5/10 rounded-full">Paso 2 de 3</span>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Catálogo Rápido -->
+                <div class="lg:col-span-3">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <button onclick="addItem('Café Espresso', 8.50, '☕')" class="p-4 bg-white border border-slate-100 rounded-2xl hover:border-color5 transition text-center group">
+                            <span class="text-2xl block mb-2 group-hover:scale-110 transition">☕</span>
+                            <span class="text-xs md:text-sm font-bold block">Café Espresso</span>
+                            <span class="text-[10px] text-color1/40">S/ 8.50</span>
+                        </button>
+                        <button onclick="addItem('Capuccino L', 12.00, '🥤')" class="p-4 bg-white border border-slate-100 rounded-2xl hover:border-color5 transition text-center group">
+                            <span class="text-2xl block mb-2 group-hover:scale-110 transition">🥤</span>
+                            <span class="text-xs md:text-sm font-bold block">Capuccino L</span>
+                            <span class="text-[10px] text-color1/40">S/ 12.00</span>
+                        </button>
+                        <button onclick="addItem('Sándwich Jamón', 15.00, '🥪')" class="p-4 bg-white border border-slate-100 rounded-2xl hover:border-color5 transition text-center group">
+                            <span class="text-2xl block mb-2 group-hover:scale-110 transition">🥪</span>
+                            <span class="text-xs md:text-sm font-bold block">Sándwich Jamón</span>
+                            <span class="text-[10px] text-color1/40">S/ 15.00</span>
+                        </button>
+                        <button onclick="addItem('Torta Chocolate', 9.00, '🍰')" class="p-4 bg-white border border-slate-100 rounded-2xl hover:border-color5 transition text-center group">
+                            <span class="text-2xl block mb-2 group-hover:scale-110 transition">🍰</span>
+                            <span class="text-xs md:text-sm font-bold block">Torta Chocolate</span>
+                            <span class="text-[10px] text-color1/40">S/ 9.00</span>
+                        </button>
+                        <button onclick="addItem('Jugo Naranja', 7.50, '🍊')" class="p-4 bg-white border border-slate-100 rounded-2xl hover:border-color5 transition text-center group">
+                            <span class="text-2xl block mb-2 group-hover:scale-110 transition">🍊</span>
+                            <span class="text-xs md:text-sm font-bold block">Jugo Naranja</span>
+                            <span class="text-[10px] text-color1/40">S/ 7.50</span>
+                        </button>
+                        <button class="p-4 bg-slate-50 border border-dashed border-slate-300 rounded-2xl text-slate-400 text-xs font-bold">
+                            + Buscar otro
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resumen Lateral -->
+                <div class="bg-slate-50/50 rounded-2xl p-6 border border-slate-100">
+                    <h4 class="font-bold text-color1 mb-4 text-sm uppercase tracking-wider">Detalle de Factura</h4>
+                    <div id="invoicePreviewList" class="space-y-3 mb-6 min-h-[100px]">
+                        <p class="text-center text-slate-400 text-xs py-10">No hay productos añadidos</p>
+                    </div>
+                    <div class="border-t border-slate-200 pt-4 space-y-2">
+                        <div class="flex justify-between text-xs text-color1/60">
+                            <span>Subtotal</span>
+                            <span id="subtotalLabel">S/ 0.00</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-color1/60">
+                            <span>IGV (18%)</span>
+                            <span id="igvLabel">S/ 0.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold text-color1 pt-2">
+                            <span>Total</span>
+                            <span id="totalLabel">S/ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between gap-4 mt-8 pt-8 border-t border-slate-100">
+                <button onclick="nextStep(1)" class="px-6 md:px-8 py-3 rounded-xl font-bold text-color1/40 hover:text-color1 transition text-sm md:text-base">Anterior</button>
+                <button onclick="nextStep(3)" class="bg-color5 text-white px-8 md:px-10 py-3 rounded-xl font-bold hover:bg-color5/90 transition shadow-lg shadow-color5/20 text-sm md:text-base">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- PASO 3: CONFIRMACIÓN -->
+        <div id="step3Content" class="hidden glass-panel rounded-2xl md:rounded-3xl p-4 md:p-8 mb-10 text-center relative">
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-color1 mb-2">¡Todo listo!</h3>
+            <p class="text-color1/50 mb-8 max-w-sm mx-auto">Revisa el resumen final y emite tu factura electrónica con validez SUNAT.</p>
+            
+            <div class="max-w-xl mx-auto bg-white border border-slate-100 rounded-3xl p-8 mb-10 text-left shadow-sm">
+                <div class="flex justify-between mb-5">
+                    <span class="text-slate-400 text-sm font-medium">Cliente Receptor</span>
+                    <span class="font-bold text-color1" id="confirmClient">---</span>
+                </div>
+                <div class="flex justify-between mb-5">
+                    <span class="text-slate-400 text-sm font-medium">Nro. Documento</span>
+                    <span class="font-bold text-color1" id="confirmDoc">---</span>
+                </div>
+                <div class="flex justify-between pt-6 border-t border-slate-100">
+                    <span class="text-color1 font-bold text-lg">Total a Liquidar</span>
+                    <span class="text-3xl font-black text-color5" id="confirmTotal">S/ 0.00</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                <button onclick="nextStep(2)" class="px-8 py-3 rounded-xl font-bold text-color1/40 hover:text-color1 transition">Revisar Productos</button>
+                <button onclick="openInvoiceModal()" class="bg-color5 text-white px-12 py-4 rounded-xl font-bold hover:bg-color5/90 transition shadow-xl shadow-color5/30 text-lg">EMITIR FACTURA</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- PDF Preview Modal -->
+    <div id="pdfModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 modal-blur" onclick="closeInvoiceModal()"></div>
+        <div class="glass-panel w-full max-w-2xl rounded-[1.5rem] md:rounded-[2rem] overflow-hidden relative z-10 shadow-2xl animate-scale-up max-h-[95vh] flex flex-col">
+            <div class="bg-white p-6 md:p-10 text-slate-900 overflow-y-auto flex-1">
+                <!-- Factura Header -->
+                <div class="flex flex-col sm:flex-row justify-between items-start mb-8 gap-4">
+                    <div>
+                        <img src="../Logo/Vexa - Fondo blanco.png" alt="Vexa Logo" class="h-10 mb-4 object-contain">
+                        <h2 class="text-2xl font-black uppercase">VEXA PRO</h2>
+                        <p class="text-[10px] text-slate-500">Av. Las Orquídeas 444, Lima - Perú</p>
+                    </div>
+                    <div class="text-right border-2 border-slate-900 p-4 rounded-xl">
+                        <p class="text-sm font-bold">R.U.C. 20601234567</p>
+                        <p class="text-lg font-black text-color5">FACTURA ELECTRÓNICA</p>
+                        <p class="text-sm font-bold">F001 - 000246</p>
+                    </div>
+                </div>
+                <!-- Client Info -->
+                <div class="grid grid-cols-2 gap-8 mb-8 border-y border-slate-200 py-4 text-xs">
+                    <div>
+                        <p class="text-slate-400 uppercase font-bold mb-1">Señor(es):</p>
+                        <p class="font-bold" id="modalClientName">---</p>
+                        <p id="modalClientDni">DNI/RUC: ---</p>
+                        <p id="modalClientAddress">Dirección: ---</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 uppercase font-bold mb-1">Detalles:</p>
+                        <p>Fecha de Emisión: 14/05/2026</p>
+                        <p>Moneda: Soles (PEN)</p>
+                    </div>
+                </div>
+                <!-- Table -->
+                <table class="w-full text-xs mb-8">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th class="px-2 py-2 text-left">Cant.</th>
+                            <th class="px-2 py-2 text-left">Descripción</th>
+                            <th class="px-2 py-2 text-right">P. Unit</th>
+                            <th class="px-2 py-2 text-right">Importe</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalTableBody">
+                        <!-- Items inject here -->
+                    </tbody>
+                </table>
+                <!-- Totals -->
+                <div class="flex justify-end">
+                    <div class="w-48 space-y-2 border-t-2 border-slate-900 pt-4">
+                        <div class="flex justify-between text-xs">
+                            <span>OP. GRAVADA:</span>
+                            <span id="modalSubtotal">S/ 0.00</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>I.G.V. (18%):</span>
+                            <span id="modalIgv">S/ 0.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-black bg-color2 text-white p-2 rounded-lg">
+                            <span>TOTAL:</span>
+                            <span id="modalTotal">S/ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Actions -->
+            <div class="bg-color1 p-6 flex justify-around gap-4">
+                <button class="flex-1 flex flex-col items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition group">
+                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-color5 transition shadow-lg group-hover:shadow-color5/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </div>
+                    Descargar PDF
+                </button>
+                <button class="flex-1 flex flex-col items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition group">
+                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-color4 transition shadow-lg group-hover:shadow-color4/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    Enviar Email
+                </button>
+                <button class="flex-1 flex flex-col items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition group">
+                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-color3 transition shadow-lg group-hover:shadow-color3/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9l-4 4v-4H3a2 2 0 01-2-2V10a2 2 0 012-2h2m2 4h10" />
+                        </svg>
+                    </div>
+                    WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menuBtn');
+        if (menuBtn) {
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+
+        let currentStep = 1;
+        let invoiceData = {
+            client: { name: '---', dni: '---', address: '---' },
+            items: [],
+            total: 0
+        };
+
+        function simulateSearch(val) {
+            const loader = document.getElementById('searchLoader');
+            if (val.length === 8 || val.length === 11) {
+                loader.classList.remove('hidden');
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    if (val === "20601234567") {
+                        invoiceData.client = { name: "CORPORACIÓN VEXA S.A.C.", dni: val, address: "AV. LOS PINOS 123, LIMA" };
+                    } else {
+                        invoiceData.client = { name: "JUAN PÉREZ LÓPEZ", dni: val, address: "JR. LAS FLORES 456, SURCO" };
+                    }
+                    document.getElementById('clientName').value = invoiceData.client.name;
+                    document.getElementById('clientAddress').value = invoiceData.client.address;
+                }, 800);
+            }
+        }
+
+        function nextStep(step) {
+            // Validaciones básicas
+            if (step === 2 && invoiceData.client.name === "---") {
+                alert("Por favor, busca un cliente primero.");
+                return;
+            }
+            if (step === 3 && invoiceData.items.length === 0) {
+                alert("Por favor, añade al menos un producto.");
+                return;
+            }
+
+            // Ocultar todos los contenidos
+            document.getElementById('step1Content').classList.add('hidden');
+            document.getElementById('step2Content').classList.add('hidden');
+            document.getElementById('step3Content').classList.add('hidden');
+            
+            // Mostrar el paso solicitado
+            document.getElementById(`step${step}Content`).classList.remove('hidden');
+            
+            // Actualizar Indicadores Visuales
+            for (let i = 1; i <= 3; i++) {
+                const indicator = document.getElementById(`stepIndicator${i}`);
+                if (i <= step) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+
+                if (i < step) {
+                    document.getElementById(`progressIndicator${i}`).style.width = "100%";
+                } else if (i >= step) {
+                    document.getElementById(`progressIndicator${i}`).style.width = "0%";
+                }
+            }
+
+            if (step === 3) {
+                document.getElementById('confirmClient').innerText = invoiceData.client.name;
+                document.getElementById('confirmDoc').innerText = invoiceData.client.dni;
+                document.getElementById('confirmTotal').innerText = `S/ ${invoiceData.total.toFixed(2)}`;
+            }
+
+            currentStep = step;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function addItem(name, price, icon) {
+            invoiceData.items.push({ name, price, icon, qty: 1 });
+            updateInvoicePreview();
+        }
+
+        function updateInvoicePreview() {
+            const list = document.getElementById('invoicePreviewList');
+            list.innerHTML = "";
+            let subtotal = 0;
+
+            invoiceData.items.forEach(item => {
+                subtotal += item.price;
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center text-xs";
+                div.innerHTML = `<span>${item.icon} ${item.name}</span> <span class="font-bold">S/ ${item.price.toFixed(2)}</span>`;
+                list.appendChild(div);
+            });
+
+            const igv = subtotal * 0.18;
+            const total = subtotal + igv;
+            invoiceData.total = total;
+
+            document.getElementById('subtotalLabel').innerText = `S/ ${subtotal.toFixed(2)}`;
+            document.getElementById('igvLabel').innerText = `S/ ${igv.toFixed(2)}`;
+            document.getElementById('totalLabel').innerText = `S/ ${total.toFixed(2)}`;
+        }
+
+        function openInvoiceModal() {
+            document.getElementById('modalClientName').innerText = invoiceData.client.name;
+            document.getElementById('modalClientDni').innerText = "DNI/RUC: " + invoiceData.client.dni;
+            document.getElementById('modalClientAddress').innerText = "Dirección: " + invoiceData.client.address;
+
+            const tbody = document.getElementById('modalTableBody');
+            tbody.innerHTML = "";
+            let subtotal = 0;
+
+            invoiceData.items.forEach(item => {
+                subtotal += item.price;
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="px-2 py-2">1</td>
+                    <td class="px-2 py-2">${item.name}</td>
+                    <td class="px-2 py-2 text-right">S/ ${item.price.toFixed(2)}</td>
+                    <td class="px-2 py-2 text-right">S/ ${item.price.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const igv = subtotal * 0.18;
+            const total = subtotal + igv;
+
+            document.getElementById('modalSubtotal').innerText = `S/ ${subtotal.toFixed(2)}`;
+            document.getElementById('modalIgv').innerText = `S/ ${igv.toFixed(2)}`;
+            document.getElementById('modalTotal').innerText = `S/ ${total.toFixed(2)}`;
+
+            document.getElementById('pdfModal').classList.remove('hidden');
+        }
+
+        function closeInvoiceModal() {
+            document.getElementById('pdfModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

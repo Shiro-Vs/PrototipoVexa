@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | PrototipoVexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        color1: '#00090d',
+                        color2: '#0c2530',
+                        color3: '#21495a',
+                        color4: '#3f748a',
+                        color5: '#55a29e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Asap';
+            src: url('Asap_Complete/Fonts/OTF/Asap-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('Asap_Complete/Fonts/OTF/Asap-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('Asap_Complete/Fonts/OTF/Asap-SemiBold.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Asap';
+            src: url('Asap_Complete/Fonts/OTF/Asap-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Asap', sans-serif;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            height: 100vh;
+            overflow: hidden;
+            color: #00090d;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 9, 13, 0.05);
+            box-shadow: 0 20px 50px rgba(12, 37, 48, 0.1);
+        }
+
+        .input-glass {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #00090d;
+            transition: all 0.3s ease;
+        }
+
+        .input-glass:focus {
+            border-color: #55a29e;
+            outline: none;
+            box-shadow: 0 0 15px rgba(85, 162, 158, 0.2);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+    <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-color5/10 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-color3/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <div class="glass w-full max-w-md p-10 rounded-3xl relative z-10 mx-4">
+        <div class="text-center mb-10">
+            <div class="w-auto h-24 mx-auto flex items-center justify-center mb-4">
+                <img src="Logo/Vexa - Fondo blanco.png" alt="Vexa Pro Logo" class="h-full object-contain">
+            </div>
+            <h1 class="text-4xl font-bold text-color1 mb-2">Vexa Pro</h1>
+            <p class="text-color3 font-medium tracking-wide">Panel de Control Inteligente</p>
+        </div>
+
+        <form onsubmit="event.preventDefault(); window.location.href='dashboard.html'" class="space-y-6">
+            <div>
+                <label class="block text-color2 text-sm font-semibold mb-2" for="username">Usuario</label>
+                <input type="text" id="username" placeholder="admin" class="input-glass w-full px-5 py-3 rounded-xl placeholder:text-color1/30" required>
+            </div>
+            <div>
+                <label class="block text-color2 text-sm font-semibold mb-2" for="password">Contraseña</label>
+                <input type="password" id="password" placeholder="••••••••" class="input-glass w-full px-5 py-3 rounded-xl placeholder:text-color1/30" required>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center text-color3 cursor-pointer">
+                    <input type="checkbox" class="mr-2 accent-color5"> Recordarme
+                </label>
+                <a href="#" class="text-color5 hover:text-color5/80 transition font-medium">¿Olvidaste tu clave?</a>
+            </div>
+            <button type="submit" class="w-full bg-color5 hover:bg-color5/90 text-white font-bold py-4 rounded-xl transition duration-300 shadow-lg shadow-color5/30 active:scale-[0.98]">
+                Ingresar al Sistema
+            </button>
+        </form>
+
+        <div class="mt-10 text-center">
+            <p class="text-color3/50 text-xs">© 2026 PrototipoVexa - Todos los derechos reservados</p>
+        </div>
+    </div>
+</body>
+</html>
